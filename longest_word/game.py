@@ -2,7 +2,14 @@
 # pylint: disable=too-few-public-methods
 
 import string
+import requests
 import random
+
+def is_dict(word):
+    url = "https://wagon-dictionary.herokuapp.com/"
+    response = requests.get(url + word)
+    data = response.json()
+    return data["found"]
 
 class Game:
     def __init__(self) -> list:
@@ -17,6 +24,8 @@ class Game:
     def is_valid(self, word):
         if not word:
             return False
+        if not is_dict(word):
+            return False
         letters = self.grid.copy() # Consume letters from the grid
         for letter in word:
             if letter in letters:
@@ -24,6 +33,7 @@ class Game:
             else:
                 return False
         return True
+
 
 game = Game()
 print(game.grid) # --> OQUWRBAZE
